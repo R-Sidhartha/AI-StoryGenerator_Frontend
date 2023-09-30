@@ -1,0 +1,53 @@
+.mode img{
+    height: 35px;
+    width: auto;
+    position: absolute;
+    right: 20px;
+    cursor: pointer;
+    top: 10px;
+}
+.form-control::placeholder {
+opacity: 0.6; 
+} 
+
+@media screen and (max-width:990px) {
+.mode img{
+    right: 80px;
+}
+.afterlogin{
+display: flex;
+width: 90vw;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+}
+.searchbar{
+    display: flex;
+    width: 90vw;
+    justify-content: center;
+align-items: center;
+}
+.userloggedin{
+    display: flex;
+    justify-content: space-between;
+width: 90vw;
+}
+
+
+}
+@media screen and (max-width:550px) {
+.box2{
+    flex-direction: column;
+    align-items: center;
+    width: 25vw;
+}
+.editbox{
+    align-items: center;
+    flex-direction: column;
+
+}
+.box2 button{
+    width: 92px;
+    margin: 10px 0px;
+        }
+}
