@@ -6,7 +6,7 @@ const VoteCounts = ({ postId,post,mode }) => {
   const [voted, setVoted] = useState(""); // To track the user's vote
   const [userVote, setUserVote] = useState(null); // User's vote type (upvote, downvote, or null)
 
-  const host = "http://localhost:5000";
+  const host = "https://fictionfusionai-server-8xm2.onrender.com";
 
   const voteStory = async (voteType) => {
     try {

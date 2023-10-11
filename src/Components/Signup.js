@@ -21,7 +21,7 @@ export default function Signup(props) {
         // API Call
         try {
           const response = await fetch(
-            "http://localhost:5000/api/auth/createuser",
+            "https://fictionfusionai-server-8xm2.onrender.com/api/auth/createuser",
             {
               method: "POST",
               headers: {

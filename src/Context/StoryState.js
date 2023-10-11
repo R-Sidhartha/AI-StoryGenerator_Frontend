@@ -2,7 +2,7 @@ import StoryContext from "./StoryContext";
 import { useState } from "react";
 
 const StoryState = (props) => {
-  const host = "http://localhost:5000"
+  const host = "https://fictionfusionai-server-8xm2.onrender.com"
   const StoryInitial = [];
   const initialPosts = []
 //   const [notes, setNotes] = useState(notesInitial)
