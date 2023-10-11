@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Posts from "./Posts";
 import StoryContext from "../Context/StoryContext";
 import Spinner from "./Spinner";
+import './Scrolltop.css'
+import './Responsive.css'
 
 function Home(props) {
   const { mode, color } = props;
@@ -26,73 +28,78 @@ function Home(props) {
     // eslint-disable-next-line
   }, []);
 
-
   const filterposts = posts.filter((post) =>
     post.genre.toLowerCase().includes(props.searchQuery?.toLowerCase() || "")
   );
+const [visible,setVisible]=useState(false)
+const handleScrollTop = () => {
+  if (window.scrollY > 0) {
+    setVisible(true);
+  } else {
+    setVisible(false);
+  }
+};
 
-  
+const scrollToTop = () => {
+  window.scrollTo(0, 0);
+};
+  useEffect(() => {
+    window.addEventListener("scroll", handleScrollTop);
+    return () => {
+      window.removeEventListener("scroll", handleScrollTop);
+    };
+  }, []);
   return (
     <div
-      className="container"
       style={{
         color: `${mode === "dark" ? "black" : "white"}`,
         minHeight: "100vh",
       }}
     >
-      <div className="top d-flex justify-content-between my-3">
+      <div className="top my-3">
         <div className="title">
-          <h2>AI-STORIES</h2>
-        </div>
-        <div className="right">
-          <button className="btn btn-sm btn-primary mx-2">
-            <Link
-              className="nav-link"
-              to="/GenerateStory"
-              style={{ height: "100%", color: "white" }}
-            >
-              Generate
-            </Link>
-          </button>
+          <h2 className="text-center">A World of AI Stories</h2>
         </div>
       </div>
-      <div className="feed">
+      {loading ? (
+        <Spinner /> 
+      ) : (
+        // Show "NO NOTES TO DISPLAY" if there are no notes
+        <div className="feed" style={{marginTop:'50px'}}>
           <div>
             <div
-              className=" text-center my-3"
-              style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}
-            >
-              {loading ? (
-                <Spinner /> // Replace with your spinner component
-              ) : // Show "NO NOTES TO DISPLAY" if there are no notes
-              filterposts.length > 0 ? (
-                // Display the search results
-                filterposts.map((post) => {
-                  return (
-                    <Posts
-                      key={post._id}
-                      post={post}
-                      mode={mode}
-                      color={color}
-                    />
-                  );
-                }) ||
-                posts.map((post) => {
-                  return (
-                    <Posts
-                      key={post._id}
-                      post={post}
-                      mode={mode}
-                      color={color}
-                    />
-                  );
-                })
-              ) : (
-                posts.length === 0 && "NO Posts TO DISPLAY"
-              )}
+              className="posts text-center "
+                         >
+              {filterposts.length > 0
+                ? // Display the search results
+                  filterposts.map((post) => {
+                    return (
+                      <Posts
+                        key={post._id}
+                        post={post}
+                        mode={mode}
+                        color={color}
+                      />
+                    );
+                  }) ||
+                  posts.map((post) => {
+                    return (
+                      <Posts
+                        key={post._id}
+                        post={post}
+                        mode={mode}
+                        color={color}
+                      />
+                    );
+                  })
+                : posts.length === 0 && "NO Posts TO DISPLAY"}
             </div>
           </div>
+          <div className={`ScrollToTop ${visible ? '':'d-none'}`} onClick={scrollToTop}>
+        <b>&#8963;</b> 
       </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,50 +1,38 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import StoryContext from "../Context/StoryContext";
-import userpng from './pics/userpng.png'
+import userpng from "./pics/userpng.png";
+import VoteCounts from "./Votes";
+import "./post.css";
+import ConfirmModal from "./ConfirmModal";
+
 export default function Posts(props) {
   const { post } = props;
   const context = useContext(StoryContext);
-  const { deletePost, upvoteStory,handleuser } = context;
-  const [likedPosts, setLikedPosts] = useState([]);
-  //   const navigate = useNavigate();
+  const { deletePost, handleuser } = context;
+  const [showModal, setShowModal] = useState(false);
+
+  const navigate = useNavigate();
 
   const location = useLocation();
 
-  const handleDelete = () => {
+
+  const handleDelete = (e) => {
+    e.preventDefault();
+    setShowModal(true);
+  };
+
+  const handleCancelDelete = (e) => {
+    e.preventDefault();
+    setShowModal(false);
+  };
+
+  const handleConfirmDelete = () => {
+    // e.preventDefault();
+    setShowModal(false);
     deletePost(post._id);
+    navigate("/user");
   };
-  const handlevote = async () => {
-    try {
-      // Perform the upvote
-      const result = await upvoteStory(post._id);
-      post.upvotes=0;
-  
-      if (result) {
-        // If upvoting was successful, update liked status and upvote count
-        if (likedPosts.includes(post._id)) {
-          // If already liked, remove the post ID from likedPosts
-          setLikedPosts(likedPosts.filter((id) => id !== post._id));
-          // Decrease the upvote count
-          post.upvotes = post.upvotes - 1;
-        } else {
-          // If not liked, add the post ID to likedPosts
-          setLikedPosts([...likedPosts, post._id]);
-          // Increase the upvote count
-          post.upvotes = post.upvotes + 1;
-        }
-      } else {
-        // Handle upvoting failure, e.g., display an error message
-        console.error('Upvoting failed');
-      }
-    } catch (error) {
-      console.error('Error upvoting story:', error);
-    }
-  };
-  
-  
-  
-  
   // Load user data from localStorage on component mount
   useEffect(() => {
     const fetchData = async () => {
@@ -54,17 +42,6 @@ export default function Posts(props) {
     fetchData();
     // eslint-disable-next-line
   }, []);
-
-  // Function to render the appropriate icon based on whether the post is liked
-  const renderIcon = () => {
-    if (likedPosts.includes(post._id)) {
-      // If the post is liked, render the liked icon
-      return <i className="fa-solid fa-heart fa-xl"></i>;
-    } else {
-      // If the post is not liked, render the unliked icon
-      return <i className="fa-regular fa-heart fa-xl"></i>;
-    }
-  };
 
   const timestamp = post.date;
 
@@ -78,8 +55,7 @@ export default function Posts(props) {
     month: "2-digit",
     day: "2-digit",
   };
-  const isHomePage = location.pathname === '/';
-
+  const isHomePage = location.pathname === "/";
 
   const indianTime = dateObj.toLocaleString("en-IN", options);
   const capitalise = (word) => {
@@ -87,75 +63,89 @@ export default function Posts(props) {
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
   };
 
-
   return (
     <>
-      <div className="story mx-3" key={post._id} style={{color: `${props.mode === "dark" ? "black" : "white"}`,
-}}>
-        <div className="user d-flex align-items-center" style={{marginTop:'80px'}}>
-        <div className="profilepic">
-            <div className="card mx-3" style={{ width: "1.8rem" }}>
-              <img src={userpng} className="card-img-top" alt="..." />
-            </div>
-          </div>
-          <div className="time d-flex justify-content-between align-items-center" style={{width:'100%'}}>
-            {isHomePage ? <h6>Name: {post.user.name}</h6> : <h6>UserName: {post.user.UserName}</h6> } <span>{indianTime}</span>
-          </div>
-        </div>
-        <span
-          className="badge"
-          style={{
-            position: "relative",
-            background: "rgb(138, 143, 150)",
-            top: "49px",
-            left: "44%",
-            color: "black",
-          }}
+    <div>
+      <div className={` ${['romantic', 'comedy', 'drama', 'fiction', 'adventure', 'horror', 'suspense', 'thriller'].includes(post.genre) ? post.genre : 'default'} my-3`} style={{borderRadius:'50px'}}>
+        <div
+          className="story postdetails "
+          key={post._id}
+          style={{ color:'white' }}
         >
-          {capitalise(post.genre)}
-        </span>
-        <div className="box d-flex flex-column">
           <div
-            className="prompt"
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
+            className="user d-flex align-items-center"
+            
           >
-            <h6 className="mx-2">Prompt: </h6>
-            <h6>{post.prompt}</h6>
-          </div>
-          <div className="content text-justify mx-3">
-            <h6>Content :</h6>
-            <span>{post.content}</span>
-          </div>
-        </div>
-        <div className="votebtns d-flex justify-content-between">
-          <div className="share d-flex my-2" style={{ width: "90%" }}>
-            <div className="btnshare">
-              <button className="btn" style={{color: `${props.mode === "dark" ? "black" : "white"}`,
-}}>
-                <i className="fa-regular fa-share-from-square fa-xl"></i>
-              </button>
+            <div className="profilepic">
+              <div className="card mx-3" style={{ width: "1.8rem" }}>
+                <img src={userpng} className="card-img-top" alt="..." />
+              </div>
             </div>
-            <div className="btnpost">
-              <button className="btn " onClick={() => handlevote(post._id)} style={{color: `${props.mode === "dark" ? "black" : "white"}`,
-}}>
-                {renderIcon(post._id)}
-              </button><span>{post.upvotes}</span>
+            <div
+              className="time d-flex justify-content-between align-items-center"
+              style={{ width: "100%" }}
+            >
+              {isHomePage ? (
+                <h6> {post.user.name}</h6>
+              ) : (
+                <h6> {post.user.UserName}</h6>
+              )}{" "}
+              <span>{indianTime}</span>
             </div>
           </div>
-          <div className="delete" style={{ width: "150px" }}>
-          {isHomePage ? null : (
-        <button className="btn my-2" onClick={() => handleDelete(post._id)} style={{color: `${props.mode === "dark" ? "black" : "white"}`,
-      }}>
-          <i className="fa-solid fa-trash fa-xl"></i>
-        </button>
-      )}
+          <span className='badge my-3'>{capitalise(post.genre)}</span>
+          <div className={'box d-flex flex-column'}>
+            <div
+              className="prompt"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <h5 className="mx-2">Prompt: </h5>
+              <span className="storyprompt">{post.prompt}</span>
+            </div>
+            <div className="content text-justify ">
+              <div className='cont'>
+              <h5>Content :</h5>
+              <span className="storydetails">{post.content}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+              <div className="votebtns d-flex justify-content-between">
+                <div className="share d-flex " style={{ width: "90%" }}>
+                  <VoteCounts postId={post._id} post={post} mode={props.mode}/>{" "}
+                </div>
+                <div className="delete" style={{ width: "150px" }}>
+                  {isHomePage ? null : (
+                    <button
+                      className="btn my-2"
+                      onClick={handleDelete}
+                      style={{
+                        color:  `${props.mode === "dark" ? "black" : "white"}`,
+                      }}
+                    >
+                      <i className="fa-solid fa-trash fa-lg"></i>
+                    </button>
+                  )}
+                </div>
+              </div>
+      </div>
+      {showModal && (
+        <ConfirmModal
+          title="Delete Post ?"
+          message="Are you sure, you want to delete this Post?"
+          handleCancelDelete={handleCancelDelete}
+          handleConfirmDelete={handleConfirmDelete}
+          handleDelete={handleDelete}
+          mode={props.mode}
+          color={props.color}
+          postId={post._id}
+        />
+      )}
     </>
   );
 }

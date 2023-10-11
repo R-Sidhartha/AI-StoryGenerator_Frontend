@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import illusionbg from './pics/illusionpng.png'
+import castle from './pics/castlepng.png'
+import Authenticationpage from "./Authenticationpage";
 
 export default function Signup(props) {
   const [credentials, setcredentials] = useState({
@@ -64,15 +67,20 @@ export default function Signup(props) {
     background: `${props.mode !== "dark" ? "rgba(41, 40, 40, 0.44)" : "white"}`,    color: `${props.mode === "dark" ? "black" : "white"}`,
   };
   return (
+    <>
+    <div className="signuppage d-flex ">
+    <div className="leftdesign ">
+      <Authenticationpage mode={props.mode} illusionbg={illusionbg} castle={castle}/>
+    </div>
     <div
-      className="container my-4 d-flex flex-column align-items-center"
-      style={{
+      className=" my-4 d-flex flex-column align-items-center"
+      style={{  
         color: `${props.mode === "dark" ? "black" : "white"}`,
         minHeight: "100vh",
       }}
     >
-      <h3 style={{ textAlign: "center" }}>Create Your StoryGenerator account</h3>
-      <form onSubmit={handleCreate} style={{ width: "40vw" }}>
+      <h3 style={{ textAlign: "center" }}>Create Your FictionFusionAI account</h3>
+      <form onSubmit={handleCreate} className="signupform">
         <div className="form-group my-3">
           <label htmlFor="name">Name</label>
           <input
@@ -133,6 +141,11 @@ export default function Signup(props) {
           Create
         </button>
       </form>{" "}
+      <div className="my-3" style={{width:'100%'}}>
+        <h6>If you already have an account, login using<Link className="mx-2" to="/login">Login</Link></h6>
+      </div>
     </div>
+    </div>
+    </>
   );
 }

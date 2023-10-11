@@ -1,84 +1,86 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Spinner from "./Spinner";
 import StoryContext from "../Context/StoryContext";
-// import Notefolder from './Notefolder'
-import Posts from './Posts.js';
+import Stories from "./Stories";
 
-export default function MyStories(props) {
-  const { mode, color } = props;
+export default function AllStories(props) {
+  const { mode, color, showalert } = props;
   const context = useContext(StoryContext);
-  const { getPosts,posts} = context;
-  const [loading, setLoading] = useState(true); 
+  const { getStories, stories, clearstories } = context;
+  const [loading, setLoading] = useState(true);
 
-  // Get the JSON data from local storage
-const userDataJSON = localStorage.getItem('userData');
-
-// Parse the JSON data into a JavaScript object
-const userData = JSON.parse(userDataJSON);
-
-// Access the 'id' property from the userData object
-const userId = userData._id;
-
-// Use the 'userId' as needed
-  
-  // Fetch posts when userId is available
+  const navigate = useNavigate();
   useEffect(() => {
-    if (userId !== null) { // Check if userId is available
-      // Fetch posts
-      getPosts(userId)
+    if (!localStorage.getItem("authtoken")) {
+      navigate("/login");
+    } else {
+      clearstories();
+      getStories()
         .then(() => {
           setLoading(false);
         })
         .catch((error) => {
           // Handle any errors here and set loading to false
-          console.error("Error fetching posts:", error);
+          console.error("Error fetching stories:", error);
           setLoading(false);
         });
     }
     // eslint-disable-next-line
-  }, [userId]);
+  }, []);
 
-  const filterposts = posts.filter((post) =>
-  post.genre.toLowerCase().includes(props.searchQuery?.toLowerCase() || '')
-);
-
+  const filterstories = stories.filter(
+    (story) =>
+      story.genre
+        .toLowerCase()
+        .includes(props.searchQuery?.toLowerCase() || "") ||
+      story.content
+        .toLowerCase()
+        .includes(props.searchQuery?.toLowerCase() || "")
+  );
 
   return (
     <div>
-      <div>
-        <div className="text-center my-3" style={{display:'grid',gridTemplateColumns:' 1fr 1fr',minHeight:'40vw'}}>
-          {loading  ? (
-           <Spinner/>// Replace with your spinner component
-          ) : (
-            // Show "NO NOTES TO DISPLAY" if there are no notes
-            filterposts.length > 0 
-              ? // Display the search results
-               ( filterposts.map((post) => {
-                  return (
-                    <Posts
-                      key={post._id}
-                      post={post}
-                      mode={mode}
-                      color={color}
-                    />
-                    
-                  );
-                }) ||
-                 posts.map((post) => {
-                  return (
-                    <Posts
-                    key={post._id}
-                    post={post}
-                    mode={mode}
-                    color={color}
-                    />
+      {loading ? (
+        <Spinner /> 
+      ) : (
+        <div>
+          <div
+            className={`text-center my-3 posts ${
+              stories.length === 0 ? "d-flex justify-content-center" : ""
+            }`}
+          >
+            {
+              // Show "NO NOTES TO DISPLAY" if there are no notes
+              filterstories.length > 0
+                ? // Display the search results
+                  filterstories.map((story) => {
+                    return (
+                      <Stories
+                        key={story._id}
+                        story={story}
+                        mode={mode}
+                        showalert={showalert}
+                        color={color}
+                      />
+                    );
+                  }) ||
+                  stories.map((story) => {
+                    return (
+                      <Stories
+                        key={story._id}
+                        story={story}
+                        mode={mode}
+                        showalert={showalert}
+                        color={color}
+                      />
                     );
                   })
-               ):
-             posts.length === 0 && "No Posts To DISPLAY"
-            )} 
+                : stories.length === 0 && "No Stories TO DISPLAY"
+            }
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

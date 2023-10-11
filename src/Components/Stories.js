@@ -1,25 +1,41 @@
-import React, { useContext } from "react";
-// import { useNavigate } from "react-router-dom";
+import React, { useContext,useState } from "react";
 import StoryContext from "../Context/StoryContext";
+import { useNavigate } from "react-router-dom";
+import ConfirmModal from "./ConfirmModal";
 
 export default function Stories(props) {
   const { story, showalert } = props;
   const context = useContext(StoryContext);
   const { createPost, deletestory } = context;
+  const [showModal, setShowModal] = useState(false);
 
-  // const navigate = useNavigate();
+  const handleDelete = (e) => {
+    e.preventDefault();
+    setShowModal(true);
+  };
 
-  // const location = useLocation();
+  const handleCancelDelete = (e) => {
+    e.preventDefault();
+    setShowModal(false);
+  };
+
+  const handleConfirmDelete = () => {
+    // e.preventDefault();
+    setShowModal(false);
+    deletestory(story._id);
+    navigate("/user");
+  };
+
+  const navigate = useNavigate();
+
   const handlepost = () => {
     createPost(story.prompt, story.genre, story.content);
     showalert("Story posted Successfully", "success");
+    navigate('/')
   };
-  const handleDelete = () => {
-    deletestory(story._id);
-  };
+ 
 
 
-  // Create a new Date object from the timestamp string
  
 
   const capitalise = (word) => {
@@ -30,16 +46,9 @@ export default function Stories(props) {
 
   return (
     <>
-      <div className="story mx-3" key={story._id}>
+      <div className="story mx-3 my-3" key={story._id}>
         <span
-          className="badge"
-          style={{
-            position: "relative",
-            background: "rgb(138, 143, 150)",
-            top: "60px",
-            left: "44%",
-            color: "black",
-          }}
+          className="storybadge"
         >
           {capitalise(story.genre)}
         </span>
@@ -52,12 +61,12 @@ export default function Stories(props) {
               alignItems: "center",
             }}
           >
-            <h4 className="mx-2">Prompt: </h4>
-            <h5>{story.prompt}</h5>
+            <h5 className="mx-2">Prompt: </h5>
+            <span className="storyprompt">{story.prompt}</span>
           </div>
-          <div className="content text-justify mx-3">
-            <h4>Content :</h4>
-            <span>{story.content}</span>
+          <div className="content text-justify mx-1">
+            <h5>Content :</h5>
+            <span className="storydetails">{story.content}</span>
           </div>
         </div>
         <div className="postbtns d-flex justify-content-center">
@@ -67,10 +76,10 @@ export default function Stories(props) {
           >
             <div className="btnshare">
               <button className="btn" style={{color: `${props.mode === "dark" ? "black" : "white"}`}}>
-                <i class="fa-regular fa-share-from-square fa-xl"></i>
+                <i class="fa-regular fa-share-from-square fa-lg"></i>
               </button>
-              <button className="btn" onClick={() => handleDelete(story._id)} style={{color: `${props.mode === "dark" ? "black" : "white"}`}}>
-                <i class="fa-solid fa-trash fa-xl"></i>
+              <button className="btn" onClick={handleDelete} style={{color: `${props.mode === "dark" ? "black" : "white"}`}}>
+                <i class="fa-solid fa-trash fa-lg"></i>
               </button>
             </div>
             <div className="btnpost">
@@ -81,8 +90,19 @@ export default function Stories(props) {
           </div>
         </div>
 
-        {/* {location.pathname === `/viewNote/${inote._id}` && <ViewNote />} */}
       </div>
+      {showModal && (
+        <ConfirmModal
+          title="Delete Story ?"
+          message="Are you sure, you want to delete this Story?"
+          handleCancelDelete={handleCancelDelete}
+          handleConfirmDelete={handleConfirmDelete}
+          handleDelete={handleDelete}
+          mode={props.mode}
+          color={props.color}
+          postId={story._id}
+        />
+      )}
     </>
   );
 }

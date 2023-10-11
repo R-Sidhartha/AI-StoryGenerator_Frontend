@@ -6,18 +6,19 @@ import {
 } from "react-router-dom";
 import Header from "./Components/Header";
 import Alert from './Components/Alert';
-import Footer from "./Components/Footer";
 import Home from "./Components/Home";
 import Login from "./Components/Login";
 import Signup from "./Components/Signup";
 import GenerateStory from "./Components/GenerateStory";
 import StoryState from "./Context/StoryState";
 import User from "./Components/User";
-
+import clearskybg from './Components/pics/clearskybg.jpg'
+import darkskybg from './Components/pics/darkskybg.avif'
 
 
 function App() {
   const key='mode';
+  const openaiapikey=process.env.REACT_APP_OPENAI_APIKEY
   const value=localStorage.getItem(key)
   const[alert,setalert]=useState(null)
   const[mode,setMode]=useState(()=>{
@@ -34,7 +35,7 @@ function App() {
     e.preventDefault()
     if (mode==='light') {
       setMode("dark")
-      document.body.style.backgroundColor="white"
+      document.body.style.backgroundColor='white'
       setcolor('black')
       showalert('light mode is enabled','success')
     }
@@ -63,20 +64,22 @@ function App() {
 
  
   return (
-    <div 
-      >
-    <StoryState>
+    <div style={{
+      backgroundImage: value === "dark" ? `url(${darkskybg})` : `url(${clearskybg})`,
+      // backgroundSize: "cover",
+      backgroundRepeat: "repeat",
+      overflow:'hidden'
+      }}>    <StoryState>
      <Router>
         <Header mode={mode} darkmode={darkmode} onSearch={handleSearch}/>
         <Alert alert={alert}/>
         <Routes>
           <Route exact path="/" element={<Home color={color} mode={mode} searchQuery={searchQuery}/>} />
           <Route exact path="/user" element={<User color={color} mode={mode} showalert={showalert} searchQuery={searchQuery}/>} />
-          <Route exact path="/generatestory" element={<GenerateStory showalert={showalert} color={color} mode={mode}/>} />
+          <Route exact path="/generatestory" element={<GenerateStory showalert={showalert} color={color} mode={mode} openaiapikey={openaiapikey}/>} />
           <Route exact path="/login" element={<Login color={color} mode={mode}/>} />
           <Route exact path="/signup" element={<Signup showalert={showalert} color={color} mode={mode}/>} />
         </Routes>
-        <Footer color={color} mode={mode}/>
       </Router>
       </StoryState>
       </div>  );

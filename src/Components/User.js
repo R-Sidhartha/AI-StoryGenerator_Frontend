@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import StoryContext from "../Context/StoryContext";
-import MyStories from "./MyStories";
+import MyPosts from "./MyPosts";
 import userpng from "./pics/userpng.png";
-import AllStories from "./AllStories";
+import MyStories from "./MyStories";
+import { Link } from "react-router-dom";
 export default function User(props) {
   const context = useContext(StoryContext);
   const { user, handleuser } = context;
@@ -17,6 +18,13 @@ export default function User(props) {
   const handleMyPosts = (e) => {
     e.preventDefault();
         setisAllstroies(false);
+  };
+
+  const [receivedData, setReceivedData] = useState("");
+
+  // Function to receive data from the child component
+  const receiveDataFromChild = (data) => {
+    setReceivedData(data);
   };
 
   const inputstyle = {
@@ -50,7 +58,7 @@ export default function User(props) {
   }, []);
 
   return (
-    <div style={{ color: `${props.mode === "dark" ? "black" : "white"}` }}>
+    <div style={{ color: `${props.mode === "dark" ? "black" : "white"}` ,minHeight:'100vh'}}>
       <h2 className="my-3 text-center">Profile Info</h2>
       <div className=" d-flex flex-column-reverse" >
         {!isAllstories ? (
@@ -58,11 +66,12 @@ export default function User(props) {
           <h1 className="text-center" style={{ marginTop: "50px" }}>
             My Posts
           </h1>
-          <MyStories
+          <MyPosts
             mode={mode}
             color={color}
             userId={user._id}
             searchQuery={props.searchQuery}
+            sendDataToParent={receiveDataFromChild}
             />
         </div>
             ):(
@@ -70,7 +79,7 @@ export default function User(props) {
           <h1 className="text-center" style={{ marginTop: "50px" }}>
             ALL Stories
           </h1>
-          <AllStories
+          <MyStories
             mode={mode}
             color={color}
             showalert={showalert}
@@ -79,15 +88,15 @@ export default function User(props) {
         </div>
             )}
         <div
-          className=" d-flex mx-3 justify-content-center  align-items-center"
+          className="profile d-flex mx-3 justify-content-center  align-items-center"
           style={{ color: `${props.mode === "dark" ? "black" : "white"}` }}
         >
-          <div className="profilepic">
+          <div className="profilepic d-flex flex-column align-items-center">
             <div className="card mx-3" style={{ width: "10rem" }}>
               <img src={userpng} className="card-img-top" alt="..." />
             </div>
           </div>
-          <form className="mx-3" style={{ width: "50vw" }}>
+          <form className="mx-3 details">
             <div className="row mb-3 my-4">
               <label htmlFor="name" className="col-sm-2 col-form-label">
                 Name :
@@ -127,19 +136,20 @@ export default function User(props) {
                   type="text"
                   className="form-control"
                   id="stories"
-                  defaultValue={user.UserName}
+                  defaultValue={receivedData}
                   style={inputstyle}
                   disabled
                 />
               </div>
             </div>
             <div className="lower d-flex justify-content-between">
+              <div className="left d-flex">
               {!isAllstories ? (
               <button
                 className="btn btn-sm btn-dark"
                 onClick={ handleAllStories }
               >
-                All Stories
+                My Stories
               </button>
               ):(
                 <button
@@ -149,7 +159,18 @@ export default function User(props) {
                 My Posts
               </button>
               )}
+          <button className="btn btn-sm btn-primary mx-2">
+            <Link
+              className="nav-link"
+              to="/GenerateStory"
+              style={{ height: "100%", color: "white",padding:'0px 0px' }}
+            >
+              Add Story
+            </Link>
+          </button>
+        </div>
               <span style={{ float: "right" }}>Created on : {indianTime}</span>
+              
             </div>
           </form>
         </div>

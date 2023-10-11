@@ -1,0 +1,20 @@
+.ScrollToTop {
+    background: #223368;
+    height: 30px;
+    width: 30px;
+    color: #ffface;
+    display: flex;
+    justify-content: center;
+    font-size: 25px;
+    position: fixed;
+    top: 92%;
+    left: 96%;
+    border-radius: 50px;
+    cursor: pointer;
+  }
+
+@media screen and (max-width: 450px) {
+    .ScrollToTop {
+    display: none;
+    }
+  }

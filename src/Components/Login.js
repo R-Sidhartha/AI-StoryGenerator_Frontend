@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import illusionbg from './pics/illusionpng.png'
+import castle from './pics/castlepng.png'
+import Authenticationpage from "./Authenticationpage";
 export default function Login(props) {
   const [credentials, setcredentials] = useState({
     UserName: "",
@@ -39,12 +41,17 @@ export default function Login(props) {
   };
 
   return (
+    <>
+    <div className="signuppage d-flex justify-content-between">
+    <div className="leftdesign ">
+      <Authenticationpage mode={props.mode} illusionbg={illusionbg} castle={castle}/>
+    </div>
     <div
       className="container my-4 d-flex flex-column align-items-center"
       style={{ color: `${props.mode === "dark" ? "black" : "white"}`,minHeight:'100vh' }}
     >
-      <h3>Login to Generate Stories</h3>
-      <form style={{ width: "40vw" }}>
+      <h3>Login and Unleash Your Imagination.</h3>
+      <form className="loginform">
         <div className="form-group my-3">
           <label htmlFor="UserName">UserName</label>
           <input
@@ -73,6 +80,11 @@ export default function Login(props) {
           Log in
         </button>
       </form>{" "}
+      <div className="my-3" style={{width:'100%'}}>
+        <h6>If you don't have an account, Create using<Link className="mx-2" to="/signup">SignUp</Link> </h6>
+      </div>
     </div>
+    </div>
+    </>
   );
 }
