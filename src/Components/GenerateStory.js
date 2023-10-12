@@ -29,7 +29,7 @@ function GenerateStory(props) {
         body: JSON.stringify({
           model: "text-davinci-003",
           prompt: `write a complete story with prompt ${prompt} in the ${genre} genre`,
-          max_tokens: 2400,
+          max_tokens: 2300,
           n: 1,
           stop: null,
           temperature: 1.0,
