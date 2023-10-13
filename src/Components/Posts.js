@@ -1,21 +1,36 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import StoryContext from "../Context/StoryContext";
 import userpng from "./pics/userpng.png";
 import VoteCounts from "./Votes";
 import "./post.css";
 import ConfirmModal from "./ConfirmModal";
+import { toPng } from 'html-to-image';
 
 export default function Posts(props) {
   const { post } = props;
   const context = useContext(StoryContext);
   const { deletePost, handleuser } = context;
   const [showModal, setShowModal] = useState(false);
+  const divRef = useRef();
 
   const navigate = useNavigate();
 
   const location = useLocation();
 
+  const handleDownloadClick = () => {
+  
+    toPng(divRef.current, { cacheBust: false })
+      .then((dataUrl) => {
+        const link = document.createElement('a');
+        link.download = 'my-image-name.png';
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleDelete = (e) => {
     e.preventDefault();
@@ -66,7 +81,7 @@ export default function Posts(props) {
   return (
     <>
     <div>
-      <div className={` ${['romantic', 'comedy', 'drama', 'fiction', 'adventure', 'horror', 'suspense', 'thriller'].includes(post.genre) ? post.genre : 'default'} my-3`} style={{borderRadius:'50px'}}>
+      <div className={` ${['romantic', 'comedy', 'drama', 'fiction', 'adventure', 'horror', 'suspense', 'thriller'].includes(post.genre) ? post.genre : 'default'} my-3`} style={{borderRadius:'50px'}} ref={divRef}>
         <div
           className="story postdetails "
           key={post._id}
@@ -131,6 +146,15 @@ export default function Posts(props) {
                       <i className="fa-solid fa-trash fa-lg"></i>
                     </button>
                   )}
+                  <button
+                className="btn"
+                style={{
+                  color: `${props.mode === "dark" ? "black" : "white"}`,
+                }}
+                onClick={handleDownloadClick}
+              >
+                <i class="fa-solid fa-download fa-lg"></i>{" "}
+              </button>
                 </div>
               </div>
       </div>
