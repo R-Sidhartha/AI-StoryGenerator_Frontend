@@ -13,19 +13,21 @@ export default function Stories(props) {
 
 
   const handleDownloadClick = () => {
-    divRef.current.style.color = 'white';
+    divRef.current.style.backgroundColor = 'black';
+    divRef.current.style.color='white'
     divRef.current.style.width = '850px';
     divRef.current.style.padding = '10px 10px';
   
     toPng(divRef.current, { cacheBust: false })
       .then((dataUrl) => {
         const link = document.createElement('a');
-        link.download = 'my-image-name.png';
+        link.download = 'FictionFusionAI_story.png';
         link.href = dataUrl;
         link.click();
   
         // Reset the properties to its original state after download
-        divRef.current.style.color = ''; 
+        divRef.current.style.backgroundColor = '';
+        divRef.current.style.color=''
         divRef.current.style.padding=''
         divRef.current.style.width=''
       })
@@ -33,7 +35,8 @@ export default function Stories(props) {
         console.log(err);
   
         // Ensure the properties are reset even if there's an error
-        divRef.current.style.color = ''; 
+        divRef.current.style.backgroundColor = '';
+        divRef.current.style.color=''
         divRef.current.style.padding='';
         divRef.current.style.width='';
       });
@@ -77,7 +80,7 @@ export default function Stories(props) {
   return (
     <>
     <div className="d-flex flex-column">
-      <div className="story mx-3 my-3 " key={story._id} ref={divRef}>
+      <div className="story  mt-3 " key={story._id} ref={divRef}>
         <span className="storybadge">{capitalise(story.genre)}</span>
         <div className="box ">
           <div

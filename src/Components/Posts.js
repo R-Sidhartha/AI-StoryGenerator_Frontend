@@ -18,17 +18,26 @@ export default function Posts(props) {
 
   const location = useLocation();
 
-  const handleDownloadClick = () => {
-  
+  const handleDownloadClick = (e) => {
+    e.preventDefault()
+    divRef.current.style.width = '648px';
+    divRef.current.style.backgroundColor = 'black';
+
     toPng(divRef.current, { cacheBust: false })
       .then((dataUrl) => {
         const link = document.createElement('a');
-        link.download = 'my-image-name.png';
+        link.download = 'FictionFusionAI_post.png';
         link.href = dataUrl;
         link.click();
+        divRef.current.style.width = '';
+        divRef.current.style.backgroundColor = '';
+
       })
       .catch((err) => {
         console.log(err);
+        divRef.current.style.width = '';
+        divRef.current.style.backgroundColor = '';
+
       });
   };
 
@@ -81,7 +90,7 @@ export default function Posts(props) {
   return (
     <>
     <div>
-      <div className={` ${['romantic', 'comedy', 'drama', 'fiction', 'adventure', 'horror', 'suspense', 'thriller'].includes(post.genre) ? post.genre : 'default'} my-3`} style={{borderRadius:'50px'}} ref={divRef}>
+      <div className={` ${['romantic', 'comedy', 'drama', 'fiction', 'adventure', 'horror', 'suspense', 'thriller'].includes(post.genre) ? post.genre : 'default'} `} style={{borderRadius:'50px'}} ref={divRef}>
         <div
           className="story postdetails "
           key={post._id}
