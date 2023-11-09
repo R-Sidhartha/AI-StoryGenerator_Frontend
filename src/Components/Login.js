@@ -47,7 +47,7 @@ export default function Login(props) {
       <Authenticationpage mode={props.mode} illusionbg={illusionbg} castle={castle}/>
     </div>
     <div
-      className="container my-4 d-flex flex-column align-items-center"
+      className=" my-4 d-flex flex-column align-items-center"
       style={{ color: `${props.mode === "dark" ? "black" : "white"}`,minHeight:'100vh' }}
     >
       <h3>Login and Unleash Your Imagination.</h3>
@@ -59,6 +59,7 @@ export default function Login(props) {
             className="form-control"
             id="email"
             name="UserName"
+            placeholder="UserName"
             value={credentials.UserName}
             onChange={onChange}
             style={inputstyle}
@@ -71,6 +72,7 @@ export default function Login(props) {
             className="form-control"
             id="password"
             name="password"
+            placeholder="Password"
             value={credentials.password}
             onChange={onChange}
             style={inputstyle}

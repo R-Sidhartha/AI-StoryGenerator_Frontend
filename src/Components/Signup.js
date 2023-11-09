@@ -88,6 +88,7 @@ export default function Signup(props) {
             className="form-control"
             id="name"
             name="name"
+            placeholder="Name"
             value={credentials.name}
             onChange={onChange}
             style={inputstyle}
@@ -102,6 +103,7 @@ export default function Signup(props) {
             className="form-control"
             id="UserName"
             name="UserName"
+            placeholder="UserName"
             aria-describedby="emailHelp"
             value={credentials.UserName}
             onChange={onChange}
@@ -117,6 +119,7 @@ export default function Signup(props) {
             className="form-control"
             id="password"
             name="password"
+            placeholder="Password"
             value={credentials.password}
             onChange={onChange}
             minLength={5}
@@ -131,6 +134,7 @@ export default function Signup(props) {
             className="form-control"
             id="cpassword"
             name="cpassword"
+            placeholder="Confirm Password"
             value={credentials.cpassword}
             onChange={onChange}
             style={inputstyle}
