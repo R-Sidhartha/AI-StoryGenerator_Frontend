@@ -91,7 +91,7 @@ export default function Stories(props) {
               alignItems: "center",
             }}
           >
-            <h5 className="mx-2">Prompt: </h5>
+            <h5 className="mx-2" style={{margin:'0px'}}>Prompt: </h5>
             <span className="storyprompt">{story.prompt}</span>
           </div>
           <div className="content text-justify mx-2 my-3">
@@ -113,7 +113,7 @@ export default function Stories(props) {
                 }}
                 onClick={handleDownloadClick}
               >
-                <i class="fa-solid fa-download fa-lg"></i>{" "}
+                <i className="fa-solid fa-download fa-lg"></i>{" "}
               </button>
               <button
                 className="btn"
@@ -122,7 +122,7 @@ export default function Stories(props) {
                   color: `${props.mode === "dark" ? "black" : "white"}`,
                 }}
               >
-                <i class="fa-solid fa-trash fa-lg"></i>
+                <i className="fa-solid fa-trash fa-lg"></i>
               </button>
             </div>
             <div className="btnpost">

@@ -11,7 +11,6 @@ export default function MyStories(props) {
 
   // Get the JSON data from local storage
 const userDataJSON = localStorage.getItem('userData');
-
 // Parse the JSON data into a JavaScript object
 const userData = JSON.parse(userDataJSON);
 

@@ -127,7 +127,7 @@ export default function Posts(props) {
                 alignItems: "center",
               }}
             >
-              <h5 className="mx-2">Prompt: </h5>
+              <h5 className="mx-2" style={{margin:'0px'}}>Prompt: </h5>
               <span className="storyprompt">{post.prompt}</span>
             </div>
             <div className="content text-justify ">
@@ -162,7 +162,7 @@ export default function Posts(props) {
                 }}
                 onClick={handleDownloadClick}
               >
-                <i class="fa-solid fa-download fa-lg"></i>{" "}
+                <i className="fa-solid fa-download fa-lg"></i>{" "}
               </button>
                 </div>
               </div>

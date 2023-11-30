@@ -11,10 +11,11 @@
 .storybadge{
     position: relative;
     background-color:rgb(138, 143, 150) ;
-    top: 76px;
+    top: 65px;
     left: 40%;
     color: black;
     padding: 5px 5px;
+    border-radius: 10px;
 }
 .badge{
     position: relative;
@@ -72,7 +73,7 @@
         left: 2px;
     }
     .storybadge{
-        top: 120px;
+        top: 110px;
         left: 33%;
         padding: 0px 5px;
     }
